@@ -16,6 +16,7 @@ import { Upload, CreditCard, Banknote, Wallet, FileText, CheckCircle, Truck } fr
 import { SuccessPopup } from "@/components/SuccessPopup";
 import OrderService from "@/lib/order-service";
 import DatabaseService from "@/lib/database-service";
+import StorageService from "@/lib/storage-service";
 
 export default function PaymentPage() {
   const { cart, clearCart } = useCartContext();
@@ -64,6 +65,20 @@ export default function PaymentPage() {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        alert('Please upload an image file (JPEG, PNG, WebP)');
+        return;
+      }
+      
+      // Validate file size (5MB max)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        alert('File size must be less than 5MB');
+        return;
+      }
+      
       setProofOfPayment(file);
     }
   };
@@ -109,11 +124,35 @@ export default function PaymentPage() {
         return;
       }
 
-      // Upload payment proof to storage (you'll need to implement this)
-      // For now, we'll use a placeholder URL
-      const paymentProofUrl = selectedPaymentMethod === 'cash-on-delivery' 
-        ? undefined 
-        : `payment_proof_${Date.now()}.jpg`;
+      // Upload payment proof to Supabase Storage
+      let paymentProofUrl: string | undefined = undefined;
+      
+      if (selectedPaymentMethod !== 'cash-on-delivery' && proofOfPayment) {
+        // Generate a temporary order ID for the upload
+        const tempOrderId = `temp_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+        
+        const { url, error } = await StorageService.uploadPaymentProof(proofOfPayment, tempOrderId);
+        
+        if (error) {
+          // Detailed error handling with specific instructions
+          console.error('Payment proof upload error:', error);
+          
+          if (error.includes('Bucket not found') || error.includes('does not exist')) {
+            alert('❌ Storage bucket not found.\n\n🔧 Fix: Run the debug-and-fix-storage.sql script in your Supabase SQL Editor.');
+          } else if (error.includes('row-level security') || error.includes('policy') || error.includes('permission')) {
+            alert('❌ Storage permissions blocked.\n\n🔧 Fix: Run the debug-and-fix-storage.sql script to set up proper policies.');
+          } else if (error.includes('JWT') || error.includes('auth')) {
+            alert('❌ Authentication error.\n\n🔧 Fix: Check your Supabase keys and configuration.');
+          } else {
+            alert(`❌ Upload failed: ${error}\n\n🔧 Please check the console for details and contact support if needed.`);
+          }
+          setIsProcessing(false);
+          return;
+        }
+        
+        paymentProofUrl = url || undefined;
+        console.log('Payment proof uploaded successfully:', paymentProofUrl);
+      }
 
       // Create the order in the database
       let orderResult;
@@ -351,7 +390,7 @@ export default function PaymentPage() {
                         <input
                           type="file"
                           id="proof-upload"
-                          accept="image/*,.pdf"
+                          accept="image/*"
                           onChange={handleFileUpload}
                           className="hidden"
                         />
@@ -365,7 +404,7 @@ export default function PaymentPage() {
                             ) : (
                               <>
                                 Click to upload or drag and drop<br />
-                                PNG, JPG, PDF up to 10MB
+                                PNG, JPG, WebP up to 5MB (Images only)
                               </>
                             )}
                           </p>
