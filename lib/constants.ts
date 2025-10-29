@@ -3,6 +3,13 @@ import { Product, Category } from '@/types'
 export const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
 export const COLORS = ['Black', 'White', 'Red', 'Blue', 'Green', 'Pink', 'Purple', 'Yellow']
 
+export const CATEGORIES = [
+  { id: 1, title: 'Festive', slug: 'festive' },
+  { id: 2, title: 'Casual', slug: 'casual' },
+  { id: 3, title: 'Semi-Formal', slug: 'semi-formal' },
+  { id: 4, title: 'Formal', slug: 'formal' }
+]
+
 export const SUB_CATEGORIES = ['GenZ', 'Jhalak', 'Sada']
 
 export const AVAILABILITY_OPTIONS = [

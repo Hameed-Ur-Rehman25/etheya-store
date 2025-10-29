@@ -904,6 +904,90 @@ export class DatabaseService {
 
 
 
+  // Newsletter subscription operations
+  static async createNewsletterSubscription(email: string) {
+    try {
+      console.log('Creating newsletter subscription for:', email)
+      
+      // Security: Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!email || !emailRegex.test(email)) {
+        const error = new Error('Invalid email address')
+        console.error('Validation error:', error.message)
+        return { data: null, error: error as PostgrestError }
+      }
+
+      // Check if email already exists
+      const { data: existingSubscription, error: checkError } = await supabase
+        .from('newsletter_subscribers')
+        .select('email')
+        .eq('email', email.toLowerCase())
+        .maybeSingle()
+
+      if (checkError && checkError.code !== 'PGRST116') { // PGRST116 means no rows returned
+        console.error('Error checking existing subscription:', checkError)
+        return { data: null, error: checkError }
+      }
+
+      if (existingSubscription) {
+        // Email already subscribed
+        return { 
+          data: null, 
+          error: { 
+            message: 'This email is already subscribed', 
+            code: 'DUPLICATE_EMAIL' 
+          } as PostgrestError 
+        }
+      }
+
+      // Insert new subscription
+      const { data, error } = await supabase
+        .from('newsletter_subscribers')
+        .insert([{ 
+          email: email.toLowerCase(),
+          subscribed_at: new Date().toISOString()
+        }])
+        .select()
+        .single()
+
+      if (error) {
+        console.error('Supabase error creating newsletter subscription:', {
+          message: error.message,
+          code: error.code,
+          details: error.details,
+          hint: error.hint
+        })
+        return { data: null, error }
+      }
+
+      console.log('Newsletter subscription created successfully:', data)
+      return { data, error: null }
+    } catch (error) {
+      console.error('Unexpected error creating newsletter subscription:', error)
+      return { data: null, error: error as PostgrestError }
+    }
+  }
+
+  // Get all newsletter subscribers (for admin use)
+  static async getNewsletterSubscribers() {
+    try {
+      const { data, error } = await supabase
+        .from('newsletter_subscribers')
+        .select('*')
+        .order('subscribed_at', { ascending: false })
+
+      if (error) {
+        console.error('Error fetching newsletter subscribers:', error)
+        return { data: null, error }
+      }
+
+      return { data, error: null }
+    } catch (error) {
+      console.error('Unexpected error getting newsletter subscribers:', error)
+      return { data: null, error: error as PostgrestError }
+    }
+  }
+
 }
 
 // Security: Export only the service class

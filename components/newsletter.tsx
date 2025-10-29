@@ -36,19 +36,47 @@ export function Newsletter() {
     setIsSubmitting(true)
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
+      // Call the API to subscribe
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        // Handle specific error cases
+        if (response.status === 409) {
+          toast({
+            title: "Already subscribed",
+            description: "This email is already subscribed to our newsletter",
+            variant: "destructive"
+          })
+        } else {
+          toast({
+            title: "Subscription failed",
+            description: data.error || "Please try again later",
+            variant: "destructive"
+          })
+        }
+        return
+      }
+
+      // Success
       toast({
         title: "Successfully subscribed!",
-        description: "Thank you for subscribing to our newsletter",
+        description: "Thank you for subscribing to our newsletter. You'll receive updates about our latest collections and exclusive offers.",
       })
       
       setEmail('')
     } catch (error) {
+      console.error('Newsletter subscription error:', error)
       toast({
         title: "Subscription failed",
-        description: "Please try again later",
+        description: "An unexpected error occurred. Please try again later.",
         variant: "destructive"
       })
     } finally {
