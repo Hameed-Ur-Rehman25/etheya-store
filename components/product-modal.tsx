@@ -315,7 +315,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className="py-4 text-sm text-gray-600 space-y-2">
-                    <p>• Free shipping on orders over Rs. 5,000</p>
                     <p>• Standard delivery: 3-5 business days</p>
                     <p>• Express delivery available</p>
                   </div>
