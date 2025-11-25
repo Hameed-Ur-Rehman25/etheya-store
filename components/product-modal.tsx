@@ -197,9 +197,9 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                 </Button>
               </div>
               
-              <Button variant="link" className="text-sm text-gray-600 p-0 h-auto">
+              {/* <Button variant="link" className="text-sm text-gray-600 p-0 h-auto">
                 Size Chart
-              </Button>
+              </Button> */}
             </div>
             
             {/* Wishlist */}
