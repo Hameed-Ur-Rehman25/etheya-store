@@ -84,7 +84,7 @@ export function Navbar() {
 
             {/* Right Icons */}
             <div className="flex items-center">
-              <Button
+              {/* <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsSearchOpen(true)}
@@ -93,7 +93,7 @@ export function Navbar() {
                 <div className="transition-transform hover:scale-110">
                   <Search className="w-6 h-6" />
                 </div>
-              </Button>
+              </Button> */}
               <Link href="/wishlist">
                 <Button variant="ghost" size="icon" className="text-gray-700 hover:text-gray-900 hover:bg-transparent">
                   <div className="transition-transform hover:scale-110">
