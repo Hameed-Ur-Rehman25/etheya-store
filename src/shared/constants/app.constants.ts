@@ -3,7 +3,7 @@ export const APP_CONFIG = {
   name: 'Etheya',
   description: 'Elegant women\'s clothing collection stitched & unstitched suits',
   url: 'https://etheya.com',
-  supportEmail: 'support@etheya.com',
+  supportEmail: 'etheya.pk@gmail.com',
   version: '1.0.0'
 } as const
 

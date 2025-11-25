@@ -14,7 +14,7 @@ const footerLinks = {
     { label: 'Size Guide', href: '/size-guide' },
     { label: 'Shipping & Returns', href: '/shipping' },
     { label: 'FAQ', href: '/faq' },
-    { label: 'Customer Care', href: '/support' }
+    { label: 'Customer Care', href: '/support' } 
   ],
   social: [
     { label: 'Instagram', href: '#' },
@@ -40,8 +40,8 @@ export function Footer() {
             {/* Contact Info */}
             <div className="space-y-2 text-gray-300">
               <p>© Etheya | Islamabad, Pakistan</p>
-              <p>info@etheya.com</p>
-              <p>+92 (0) 51 123 4567</p>
+              <p>etheya.pk@gmail.com</p>
+              {/* <p>+92 (0) 51 123 4567</p> */}
             </div>
           </div>
 

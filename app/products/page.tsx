@@ -234,7 +234,7 @@ function ProductsPageContent() {
               <h3 className="text-xl font-semibold mb-4 text-neutral-200">Contact Us</h3>
               <div className="space-y-2 text-neutral-400">
                 <p>© Etheya | Islamabad Pakistan</p>
-                <p>info@etheya.com</p>
+                <p>etheya.pk@gmail.com</p>
               </div>
             </div>
 
