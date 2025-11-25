@@ -10,6 +10,15 @@ export interface Product {
   subCategory?: string
   inStock?: boolean
   featured?: boolean
+  // Additional product details from database
+  pieces?: string
+  fabric?: string
+  color?: string
+  embellishments?: string
+  fit?: string
+  season?: string
+  care_instructions?: string
+  model_size?: string
 }
 
 export interface Category {

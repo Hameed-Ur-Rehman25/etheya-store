@@ -35,6 +35,17 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
 
   if (!product) return null;
 
+  // Debug: Log product data to see what's being passed
+  console.log('Product data in modal:', {
+    fabric: product.fabric,
+    embellishments: product.embellishments,
+    pieces: product.pieces,
+    fit: product.fit,
+    season: product.season,
+    care_instructions: product.care_instructions,
+    model_size: product.model_size
+  });
+
   const toggleSection = (section: string) => {
     setOpenSections(prev => 
       prev.includes(section) 
@@ -126,9 +137,11 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
             </h1>
             
             {/* Product Type */}
-            <p className="text-sm text-gray-600 mb-2 uppercase tracking-wide">
-              3 PIECES
-            </p>
+            {product.subCategory && (
+              <p className="text-sm text-gray-600 mb-2 uppercase tracking-wide">
+                {product.subCategory}
+              </p>
+            )}
             
             {/* SKU */}
             <p className="text-xs text-gray-500 mb-4">
@@ -270,10 +283,15 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className="py-4 text-sm text-gray-600 space-y-2">
-                    <p>• Premium lawn fabric</p>
-                    <p>• Embroidered design</p>
-                    <p>• 3-piece set</p>
-                    <p>• Machine washable</p>
+                    {product.fabric && <p>• Fabric: {product.fabric}</p>}
+                    {product.embellishments && <p>• Embellishments: {product.embellishments}</p>}
+                    {product.pieces && <p>• {product.pieces}</p>}
+                    {product.fit && <p>• Fit: {product.fit}</p>}
+                    {product.season && <p>• Season: {product.season}</p>}
+                    {product.care_instructions && <p>• Care: {product.care_instructions}</p>}
+                    {!product.fabric && !product.embellishments && !product.pieces && !product.fit && !product.season && !product.care_instructions && (
+                      <p className="text-gray-400 italic">Product information not available</p>
+                    )}
                   </div>
                 </CollapsibleContent>
               </Collapsible>
@@ -323,7 +341,11 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className="py-4 text-sm text-gray-600">
-                    <p>Model is wearing size M</p>
+                    {product.model_size ? (
+                      <p>{product.model_size}</p>
+                    ) : (
+                      <p className="text-gray-400 italic">Model size information not available</p>
+                    )}
                   </div>
                 </CollapsibleContent>
               </Collapsible>

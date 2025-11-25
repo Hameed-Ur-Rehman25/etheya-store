@@ -104,7 +104,16 @@ export class DatabaseService {
       category: dbProduct.category || 'Uncategorized',
       subCategory: dbProduct.sub_category || 'Uncategorized',
       inStock: true, // Default to true since we don't have stock tracking
-      featured: false // Default to false since we don't have featured flag
+      featured: false, // Default to false since we don't have featured flag
+      // Additional product details
+      pieces: dbProduct.pieces || undefined,
+      fabric: dbProduct.fabric || undefined,
+      color: dbProduct.color || undefined,
+      embellishments: dbProduct.embellishments || undefined,
+      fit: dbProduct.fit || undefined,
+      season: dbProduct.season || undefined,
+      care_instructions: dbProduct.care_instructions || undefined,
+      model_size: dbProduct.model_size || undefined
     }
   }
 
@@ -189,6 +198,11 @@ export class DatabaseService {
             .eq('product_id', product.id)
 
           const sizeArray = sizes?.map(s => s.size) || ['S', 'M', 'L', 'XL'] // Default sizes if none found
+          
+          // Debug: Log if using default sizes
+          if (!sizes || sizes.length === 0) {
+            console.log(`Product ${product.id} (${product.title}) has no sizes in database, using defaults`);
+          }
           const imageArray = images?.map(img => img.image_url) || ['/assets/placeholder.jpg']
 
           return this.transformProduct(product, sizeArray, imageArray)
