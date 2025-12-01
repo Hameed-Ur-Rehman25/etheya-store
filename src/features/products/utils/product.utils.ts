@@ -20,9 +20,46 @@ export function filterProducts(products: Product[], filters: SearchFilters): Pro
       return false
     }
     
+    // Sub-category filter
+    if (filters.subCategories.length > 0 && !filters.subCategories.includes(product.subCategory || '')) {
+      return false
+    }
+    
     // Size filter
     if (filters.sizes.length > 0 && !product.sizes.some(size => filters.sizes.includes(size))) {
       return false
+    }
+    
+    // Availability filter
+    if (filters.availability.length > 0) {
+      if (filters.availability.includes('in-stock') && !product.inStock) {
+        return false
+      }
+      if (filters.availability.includes('out-of-stock') && product.inStock !== false) {
+        return false
+      }
+    }
+    
+    // Fabric filter
+    if (filters.fabrics.length > 0 && product.fabric) {
+      const productFabricLower = product.fabric.toLowerCase()
+      const matchesFabric = filters.fabrics.some(fabric => 
+        productFabricLower.includes(fabric.toLowerCase())
+      )
+      if (!matchesFabric) {
+        return false
+      }
+    }
+    
+    // Pieces filter
+    if (filters.pieces.length > 0 && product.pieces) {
+      const productPiecesLower = product.pieces.toLowerCase()
+      const matchesPieces = filters.pieces.some(piece => 
+        productPiecesLower.includes(piece.toLowerCase())
+      )
+      if (!matchesPieces) {
+        return false
+      }
     }
     
     // Price filter
