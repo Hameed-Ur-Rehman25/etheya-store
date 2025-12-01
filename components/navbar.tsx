@@ -28,11 +28,11 @@ export function Navbar() {
         isScrolled ? 'bg-white shadow-md' : 'bg-white'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-row items-center justify-between h-16 py-2 md:py-0 gap-2 md:gap-0">
+          <div className="relative flex flex-row items-center justify-between h-16 py-2 md:py-0 gap-2 md:gap-0">
             {/* Left - Menu Button (Mobile only) or Desktop Navigation Links */}
-            <div className="flex items-center gap-4 w-full md:w-auto justify-start">
+            <div className="flex items-center gap-4 md:w-auto justify-start">
               {/* Mobile Menu Button */}
-              <div className="md:hidden mr-2">
+              <div className="md:hidden">
                 <Button
                   variant="ghost"
                   size="icon"
@@ -69,7 +69,7 @@ export function Navbar() {
             </div>
 
             {/* Center - Logo (responsive) */}
-            <Link href="/" className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center space-x-2 absolute left-1/2 transform -translate-x-1/2 md:static md:transform-none">
               <div className="relative w-8 h-8">
                 <Image
                   src="/assets/logo.png"
