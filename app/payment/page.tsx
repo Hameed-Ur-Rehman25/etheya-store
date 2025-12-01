@@ -477,24 +477,24 @@ export default function PaymentPage() {
                   <>
                     <div className="space-y-4 mb-6">
                       {items.map((item: CartItem, idx) => (
-                        <div key={idx} className="flex items-center space-x-3">
-                          <div className="relative w-16 h-16">
+                        <div key={idx} className="flex gap-3 pb-4 border-b border-gray-200 last:border-0">
+                          <div className="relative w-20 h-20 flex-shrink-0">
                             <Image 
                               src={item.product.image} 
                               alt={item.product.title} 
-                              width={64} 
-                              height={64} 
-                              className="rounded object-cover" 
+                              width={80} 
+                              height={80} 
+                              className="rounded-lg object-cover w-full h-full" 
                             />
-                            <span className="absolute -top-2 -right-2 bg-gray-900 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                            <span className="absolute -top-2 -right-2 bg-gray-900 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-semibold">
                               {item.quantity}
                             </span>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="font-medium text-gray-900 truncate">{item.product.title}</div>
-                            <div className="text-sm text-gray-500">Size: {item.selectedSize}</div>
+                            <div className="font-medium text-gray-900 mb-1 line-clamp-2">{item.product.title}</div>
+                            <div className="text-sm text-gray-500 mb-2">Size: {item.selectedSize}</div>
+                            <div className="font-semibold text-gray-900">Rs. {(item.price * item.quantity).toLocaleString()}</div>
                           </div>
-                          <div className="font-semibold text-gray-900">Rs. {(item.price * item.quantity).toLocaleString()}</div>
                         </div>
                       ))}
                     </div>
